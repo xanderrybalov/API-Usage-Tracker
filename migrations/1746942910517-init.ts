@@ -63,11 +63,20 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       default: pgm.func('now'),
     },
   })
+
+  pgm.createTable('stripe_events', {
+    id: 'serial',
+    type: { type: 'text', notNull: true },
+    payload: { type: 'jsonb', notNull: true },
+    created_at: { type: 'timestamp', default: pgm.func('now') },
+  });
+  
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
   pgm.dropTable('usage_events')
   pgm.dropTable('projects')
   pgm.dropTable('users')
+  pgm.dropTable('stripe_events')
   pgm.dropExtension('pgcrypto')
 }
